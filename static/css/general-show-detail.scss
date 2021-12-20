@@ -1,0 +1,45 @@
+.cod-select {
+	.multiselect__option--highlight {
+	    background: white;
+	    outline: none;
+	    color: black;
+	}
+
+	.link_location_xteam {
+		color: #058f49;
+	}
+
+	.option__title {
+		font-size: 13px;
+	}
+
+	.option__desc {
+		font-size: 13px;
+		margin-left: 25px;
+		line-height: 1.5;
+	}
+
+	.multiselect__option--selected.multiselect__option--highlight {
+		background-color: #cfd4d1;
+		color: black;
+	}
+
+	.multiselect__option--selected {
+		font-weight: 400;
+		background: url("~assets/images/complete.png") 12px 14px no-repeat;
+		background-size: 20px 20px;
+
+		.icon_user_not_selected {
+			display: none;
+		}
+
+		.option__title {
+			margin-left: 25px;
+		}
+
+	}
+
+	.multiselect__tags {
+    	min-height: 41px !important;
+    }
+}

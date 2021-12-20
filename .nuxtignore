@@ -1,0 +1,9 @@
+pages/app-version/index.vue
+pages/x-distributor/index.vue
+pages/bag/index.vue
+pages/block-carts/index.vue
+pages/files-management/index.vue
+pages/issues/index.vue
+pages/manage-money/index.vue
+pages/punishment-management/index.vue
+pages/routes-management/index.vue
