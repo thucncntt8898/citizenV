@@ -1,6 +1,54 @@
 <template>
-    <div id="layout-right-side" v-on:click="openMainContent">
+    <div id="layout-right-side" v-on:click="">
+      <div class="layout-right-side-body">
+        <div class="menu-list" :class="showMenu ? 'menu-list-show' : 'menu-list-hide'">
+          <div class="category-container">
 
+          </div>
+        </div>
+        <div class="categories-container">
+          <div class="category-operation">
+            <div class="category-operation-header d-flex justify-content-between align-items-center">
+              <div class="category-operation-header-title font-weight-bolder">
+                <i class="fa fa-users"></i>Quản lý
+              </div>
+              <div class="">
+                <div class="dropdown-category-operation-filter-content" v-if="isShowFilter">
+                  <div class="route-filter d-flex align-items-center mb-2">
+                    <b class="width-label">Khu vực:</b>
+                    <vue-multiselect
+                      v-model="districtsAreSelected"
+                      :options="$store.state.layoutV2.districts"
+                      :multiple="true"
+                      :close-on-select="false"
+                      :clear-on-select="false"
+                      :preserve-search="true"
+                      :loading="$store.state.layoutV2.isDataFilterLoading"
+                      :taggable="true"
+                      placeholder="Chọn Khu vực"
+                      label="name"
+                      track-by="id"
+                      selectLabel=""
+                      deselectLabel=""
+                      selectedLabel="Đã chọn"
+                    >
+                      <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} khu vực đã được chọn</span></template>
+                      <template slot="tag">{{ '' }}</template>
+                    </vue-multiselect>
+                  </div>
+                  <button-custom class="btn-custom-filter" :is-spinner="isFilterLoading" background-color="#058f49" classIcon="fa fa-filter" buttonName="Lọc" @submitEvent="filter()"></button-custom>
+                </div>
+              </div>
+            </div>
+            <div class="category-operation-body">
+              <div class="d-flex align-items-center justify-content-between each-category" v-for="(operation, index) in operationCategories" :key="index"
+                   :class="activeRoute(operation) ? 'each-category-active' : ''" v-on:click="pickCategoryOperation(operation)">
+                <div>{{operation.text}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -17,30 +65,9 @@
             return {
                 showMenu: 0,
                 operationCategories: [
-                    {id: 0, text: 'Tình hình vận hành', point: 0, order: 0, subOrder: 0, route: '/v2/general-situation-operator'},
-                    {id: 1, text: 'Quản lý Xteam của NVBC', point: 0, order: 0, subOrder: 0, route: '/v2/general-operation'},
-                    {id: 2, text: 'Quản lý đơn delay', point: 0, order: 0, subOrder: 0, route: '/v2/delay-order'},
-                    {id: 3, text: 'Báo cáo sai km', point: 0, order: 0, subOrder: 0, route: '/v2/report-km'},
-                    {id: 4, text: 'Thiếu hàng', point: 0, order: 0, subOrder: 0, route: '/v2/miss-order'},
-                    {id: 5, text: 'Hủy đơn', point: 0, order: 0, subOrder: 0, route: '/v2/cancel-order'},
-                    {id: 6, text: 'Bồi hoàn', point: 0, order: 0, subOrder: 0, route: '/v2/refund-order'},
-                    {id: 7, text: 'Khiếu nại', point: 0, order: 0, subOrder: 0, route: '/v2/claim-order'},
-                    {id: 8, text: 'Dashboard', point: 0, order: 0, subOrder: 0},
-                    {id: 9, text: 'Bản đồ vận hành', point: 0, order: 0, subOrder: 0, route: 'map'}
-                ],
-
-                menuCategories: [
-                    {id: 0, text: 'Quản lý', route: '', iconClass: 'fa-cog', options: [
-                            {id: 0, text: 'Quản lý phạt X', route: '/v2/punishment-management', iconClass: 'fa-hand-pointer-o'},
-                            {id: 1, text: 'Quản lý ticket', route: '/v2/issues', iconClass: 'fa-ticket'},
-                            {id: 2, text: 'Quản lý tiền CoD', route: '/v2/manage-money', iconClass: 'fa fa-money'},
-                            {id: 3, text: 'Quản lý config', route: '/v2/global-config', iconClass: 'fa fa-wrench'},
-                            {id: 4, text: 'Quản lý Xteam', route: '/v2/manage-xteam', iconClass: 'fa fa-users'},
-                            {id: 5, text: 'Quản lý config cod', route: '/v2/config-cod', iconClass: 'fa-user-secret'},
-                            {id: 6, text: 'Quản lý config Xstar', route: '/v2/config-xstar', iconClass: 'fa-star'},
-                            {id: 7, text: 'Quản lý routing config', route: '/v2/routing-config', iconClass: 'fa-sitemap'}
-                        ], isOpen: false},
-                    {id: 1, text: 'Quản lý app version', route: '/v2/app-version', iconClass: 'fa-mobile', options: [], isOpen: false}
+                    {id: 0, text: 'Tình hình nhập liệu', point: 0, order: 0, subOrder: 0, route: '/home'},
+                    {id: 1, text: 'Quản lý tỉnh/thành phố', point: 0, order: 0, subOrder: 0, route: '/province'},
+                    {id: 1, text: 'Quản lý tài khoản', point: 0, order: 0, subOrder: 0, route: '/account'},
                 ],
 
                 isFilterLoading: false,
@@ -59,6 +86,14 @@
                 this.showMenu = !this.showMenu
                 this.isShowFilter = false
             },
+          pickCategoryOperation(operation) {
+            this.$router.push(operation.route);
+          },
+          activeRoute(operation) {
+            console.log($nuxt.$route.path);
+            if ($nuxt.$route.path.includes(operation.route)) return true
+            return false
+          }
         }
     }
 </script>
@@ -82,6 +117,7 @@
         border-left: 1px solid #e8e8e8;
         height: calc(100vh - 40px);
         width: 250px;
+        margin-top: 10px;
 
         .layout-right-side-header {
             height: 64px;

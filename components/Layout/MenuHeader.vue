@@ -1,10 +1,10 @@
 <template>
     <div id="layout-menu-header-v2">
         <div class="d-flex justify-content-between align-items-end">
-<!--            <div class="log-out" v-on:click="logout">-->
-<!--                <i class="fa fa-sign-out mr-1"></i>-->
-<!--                Đăng xuất-->
-<!--            </div>-->
+            <div class="log-out" v-on:click="logout">
+                <i class="fa fa-sign-out mr-1"></i>
+                Đăng xuất
+            </div>
           <div class="float-right">
             <i class=""></i>
           </div>
@@ -36,7 +36,6 @@
         background-color: #058f49;
         color: white;
         padding: 0.5rem 1rem;
-        height: 80px;
 
         h5 {
             margin-bottom: unset;

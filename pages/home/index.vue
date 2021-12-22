@@ -1,7 +1,7 @@
 <template>
   <div id="general-situation-operator-main">
     <div class="genaral-header d-flex align-items-center justify-content-between">
-      <h4 class="title">Tình hình nhập số liệu</h4>
+      <h4 class="title">Tình hình nhập liệu</h4>
     </div>
   </div>
 </template>

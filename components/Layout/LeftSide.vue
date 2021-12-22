@@ -1,10 +1,7 @@
 <template>
     <div id="layout-left-side">
-        <!-- <iframe id="iframe-ightk" class="iframe-ightk" :src="getChatUrl" frameborder="0" width="100%" height="100%"
-                marginwidth="0" marginheight="0" scrolling="auto" allowfullscreen="true" ref="iframe-ghtk" v-on:mouseenter="mouseOver">
-        </iframe> -->
         <transition name="main-content-fade">
-            <div class="main-content" id="main-content" v-show="$store.state.layoutV2.isOpenMainContent">
+            <div class="main-content" id="main-content">
                 <Nuxt/>
             </div>
         </transition>
@@ -43,11 +40,6 @@
         height: calc(100vh - 40px);
         position: relative;
 
-        /*.iframe-ightk {
-            width: 100%;
-            height: 100%;
-        }*/
-
         .main-content {
             position: absolute;
             top: 0;
@@ -57,10 +49,6 @@
             width: 100%;
             background-color: white;
             border-left: 1px solid rgba(196, 196, 196, 0.7);
-
-            /*@include smallDesktop {*/
-                /*width: calc(100vw - 535px);*/
-            /*}*/
         }
 
         .main-content-fade-enter-active, .main-content-fade-leave-active {
