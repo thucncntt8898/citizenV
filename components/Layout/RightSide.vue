@@ -12,33 +12,6 @@
               <div class="category-operation-header-title font-weight-bolder">
                 <i class="fa fa-users"></i>Quản lý
               </div>
-              <div class="">
-                <div class="dropdown-category-operation-filter-content" v-if="isShowFilter">
-                  <div class="route-filter d-flex align-items-center mb-2">
-                    <b class="width-label">Khu vực:</b>
-                    <vue-multiselect
-                      v-model="districtsAreSelected"
-                      :options="$store.state.layoutV2.districts"
-                      :multiple="true"
-                      :close-on-select="false"
-                      :clear-on-select="false"
-                      :preserve-search="true"
-                      :loading="$store.state.layoutV2.isDataFilterLoading"
-                      :taggable="true"
-                      placeholder="Chọn Khu vực"
-                      label="name"
-                      track-by="id"
-                      selectLabel=""
-                      deselectLabel=""
-                      selectedLabel="Đã chọn"
-                    >
-                      <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} khu vực đã được chọn</span></template>
-                      <template slot="tag">{{ '' }}</template>
-                    </vue-multiselect>
-                  </div>
-                  <button-custom class="btn-custom-filter" :is-spinner="isFilterLoading" background-color="#058f49" classIcon="fa fa-filter" buttonName="Lọc" @submitEvent="filter()"></button-custom>
-                </div>
-              </div>
             </div>
             <div class="category-operation-body">
               <div class="d-flex align-items-center justify-content-between each-category" v-for="(operation, index) in operationCategories" :key="index"
@@ -67,7 +40,11 @@
                 operationCategories: [
                     {id: 0, text: 'Tình hình nhập liệu', point: 0, order: 0, subOrder: 0, route: '/home'},
                     {id: 1, text: 'Quản lý tỉnh/thành phố', point: 0, order: 0, subOrder: 0, route: '/province'},
-                    {id: 1, text: 'Quản lý tài khoản', point: 0, order: 0, subOrder: 0, route: '/account'},
+                    {id: 2, text: 'Quản lý quận/huyện', point: 0, order: 0, subOrder: 0, route: '/district'},
+                    {id: 3, text: 'Quản lý phường/xã', point: 0, order: 0, subOrder: 0, route: '/ward'},
+                    {id: 4, text: 'Quản lý thôn/bản/tổ dân phố', point: 0, order: 0, subOrder: 0, route: '/hamlet'},
+                    {id: 5, text: 'Quản lý tài khoản', point: 0, order: 0, subOrder: 0, route: '/account'},
+                    {id: 6, text: 'Quản lý dân số', point: 0, order: 0, subOrder: 0, route: '/citizen'},
                 ],
 
                 isFilterLoading: false,

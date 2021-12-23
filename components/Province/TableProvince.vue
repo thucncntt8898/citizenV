@@ -15,9 +15,9 @@
       <tr v-for="(province, index) in provinces" :key="index">
         <td>{{province.name}}</td>
         <td>{{province.code}}</td>
-        <td>{{province.code}}</td>
-        <td>{{province.code}}</td>
-        <td>{{province.code}}</td>
+        <td>{{province.districts.length}}</td>
+        <td>{{province.countWard}}</td>
+        <td>{{province.countHamlet}}</td>
         <td>
           <div class="d-flex">
             <button type="button" class="btn btn-apply-outline-ghtk col-6" v-on:click="updateEvent(province)"><i class="fa fa-edit"></i> Sửa</button>
@@ -41,19 +41,7 @@ export default {
       this.$swal({
         title: 'Bạn có muốn xóa config này không?',
       }).then((result) => {
-        if (result.isConfirmed) {
-          let params = {
-            'id': this.configs[index]['id']
-          }
-          this.$store.dispatch('configXstar/deleteConfigXstar', params).then(response => {
-            if (response.data.success) {
-              this.$toast.success(response.data.message)
-              this.configs.splice(index, 1);
-            } else {
-              this.$toast.error(response.data.success)
-            }
-          })
-        }
+
       })
     },
 
