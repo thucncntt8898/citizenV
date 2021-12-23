@@ -1,6 +1,6 @@
 export default {
   env: {
-    apiURL: 'http://localhost:8000/api'
+    apiURL: 'http://localhost:8888/api'
   },
   /*
   ** Nuxt rendering mode
@@ -104,8 +104,16 @@ export default {
   },
 
   axios: {
-    baseURL: 'http://localhost:8000/api'
+    baseURL: 'http://localhost:8888/api'
   },
+
+  // proxy: {
+  //   '/api': {
+  //     target: 'http://localhost:8888',
+  //     changeOrigin: true,
+  //     pathRewrite: { '^/api': '/' },
+  //   },
+  // },
 
   /*
   ** Build configuration

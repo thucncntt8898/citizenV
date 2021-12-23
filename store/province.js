@@ -15,5 +15,9 @@ export const actions = {
 
   insertProvince({commit}, params) {
     return axios.post('province/insert', params);
+  },
+
+  updateProvince({commit}, params) {
+    return axios.post('province/update', params);
   }
 }
