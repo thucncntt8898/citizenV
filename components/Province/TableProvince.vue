@@ -15,9 +15,9 @@
       <tr v-for="(province, index) in provinces" :key="index">
         <td>{{province.name}}</td>
         <td>{{province.code}}</td>
-        <td>{{province.code}}</td>
-        <td>{{province.code}}</td>
-        <td>{{province.code}}</td>
+        <td>{{province.districts.length}}</td>
+        <td>{{province.countWard }}</td>
+        <td>{{province.countHamlet}}</td>
         <td>
           <div class="d-flex">
             <button type="button" class="btn btn-apply-outline-ghtk col-6" v-on:click="updateEvent(province)"><i class="fa fa-edit"></i> Sửa</button>

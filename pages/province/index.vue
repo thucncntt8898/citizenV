@@ -97,42 +97,12 @@ export default {
       return 0
     },
 
-    handleShowStationDetail() {
-      this.isShowStation = true;
-      this.isCountPackagesLoading = true;
-      let payload = {
-        station_id: this.$store.state["x-screen"].station.id,
-        date: this.$store.state["x-screen"].date,
-        // from_at: this.$store.state["x-screen"].fromAt,
-        // to_at: this.$store.state["x-screen"].toAt,
-        type: 1,
-        page: 1,
-        limit: 10
-      }
-      this.$store.dispatch('x-screen/countPackagesByStation', payload).then(response => {
-        this.isCountPackagesLoading = false;
-      });
-    },
 
     handleGoBackEvent() {
       this.isShowStation = false;
       this.$store.dispatch('x-screen/resetData');
     },
 
-    handleGoRefreshEvent() {
-      this.$store.dispatch('x-screen/resetData');
-      let payload = {
-        station_id: this.$store.state["x-screen"].station.id,
-        date: this.$store.state["x-screen"].date,
-        // from_at: this.$store.state["x-screen"].fromAt,
-        // to_at: this.$store.state["x-screen"].toAt,
-        type: 5,
-        page: 1,
-        limit: 10
-      }
-      this.$store.dispatch('x-screen/countPackagesByStation', payload).then(response => {
-      });
-    }
   }
 }
 </script>
