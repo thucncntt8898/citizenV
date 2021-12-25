@@ -6,10 +6,11 @@
       </div>
     </div>
     <div v-if="step == 1">
-      <table-user
-        :users="users"
+      <table-citizen
+        :citizens="citizens"
         @handleUpdateEvent="updateEvent"
-      ></table-user>
+        @handleAddCitizen="handleAddCitizen"
+      ></table-citizen>
       <div class="row">
         <div class="col-2">
           <show-text-entries
@@ -24,28 +25,27 @@
       </div>
     </div>
     <div id="form-config" v-if="step == 2">
-      <FormFilterProvince
+      <FormFilterCitizen
         :action-type="actionType"
         :rowIsSelected="rowIsSelected"
         :actionType="actionType"
         @goBackEvent="handleGoBackEvent"
       >
-      </FormFilterProvince>
+      </FormFilterCitizen>
     </div>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import FormFilterUser from "./FormFilterUser.vue";
+import FormFilterCitizen from "./FormFilterCitizen.vue";
 import PaginationCustom from "../Common/PaginationCustom.vue";
 import showTextEntries from "../Common/showTextEntries.vue";
-import TableProvince from "./TableUser.vue";
+import TableCitizen from "./TableCitizen.vue";
 import {help} from "../../plugins/mixins/help.js";
-import TableUser from "./TableUser.vue";
 
 export default {
-  name: "MainUser",
+  name: "MainCitizen",
 
   asyncData(context) {
     context.store.dispatch('localStorage/setOperationCategoriesIndex', 1)
@@ -53,18 +53,18 @@ export default {
 
   middleware: 'authenticated',
 
-  components: {TableUser, FormFilterUser},
+  components: {TableCitizen, FormFilterCitizen},
 
   created() {
-    this.getListUsers();
+    this.getListCitizens();
   },
 
   mixins: [help],
 
   data() {
     return {
-      isLoadingProvince: false,
-      users: [],
+      isLoadingCitizen: false,
+      citizens: [],
       currentPage: 1,
       limit: 10,
       pageCount: 0,
@@ -77,17 +77,18 @@ export default {
       provinces: [],
       districts: [],
       wards: [],
-      hamlets: []
+      hamlets: [],
+      paramReq: {}
     }
   },
 
   methods: {
-    getListUsers(type='filter') {
+    getListCitizens(type='filter') {
       if(type == 'filter') {
         this.currentPage = 1
       }
 
-      this.isLoadingProvince = true
+      this.isLoadingCitizen = true
 
       this.paramReq = {
         'page': this.currentPage,
@@ -97,22 +98,21 @@ export default {
         'ward_ids': this.wards,
         'hamlet_ids': this.hamlets
       }
-
-      this.$store.dispatch('user/getListUsers', this.paramReq).then(response => {
+      this.$store.dispatch('citizen/getListCitizens', this.paramReq).then(response => {
         if (response.data.success) {
-          this.users = response.data.data.data_list;
+          this.citizens = response.data.data.data_list;
           let total = response.data.data.count;
-          this.currentTotal = this.users.length;
+          this.currentTotal = this.citizens.length;
           this.countAll = total;
           this.pageCount = this.getPageCount(total, this.limit);
         } else {
           this.$toast.error('Lỗi.');
         }
-        this.isLoadingProvince = false;
+        this.isLoadingCitizen = false;
       })
     },
 
-    createEvent() {
+    handleAddCitizen() {
       this.step = 2;
       this.actionType = 'add';
     },
@@ -126,13 +126,13 @@ export default {
     handleGoBackEvent() {
       this.step = 1;
       this.rowIsSelected = {};
-      this.getListUsers('paginate');
+      this.getListCitizens('paginate');
     },
 
     handleSelectPageEvent(page) {
       this.currentPage = page;
-      this.getListUsers('paginate');
-    }
+      this.getListCitizens('paginate');
+    },
   }
 }
 </script>

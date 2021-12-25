@@ -10,7 +10,10 @@ export const mutations = {
 
 export const actions = {
   getListUsers({commit}, params) {
-    console.log(params);
     return axios.get('user/list', {params: params});
+  },
+
+  updateUser({commit}, params) {
+    return axios.post('user/update', params);
   },
 }

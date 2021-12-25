@@ -24,13 +24,13 @@
       </div>
     </div>
     <div id="form-config" v-if="step == 2">
-      <FormFilterProvince
+      <FormFilterUser
         :action-type="actionType"
         :rowIsSelected="rowIsSelected"
         :actionType="actionType"
         @goBackEvent="handleGoBackEvent"
       >
-      </FormFilterProvince>
+      </FormFilterUser>
     </div>
   </div>
 </template>

@@ -75,7 +75,8 @@ export default {
       rowIsSelected: {},
       actionType: 'add',
       countAll: 0,
-      currentTotal: 0
+      currentTotal: 0,
+      paramReq: {}
     }
   },
 

@@ -15,7 +15,8 @@
             </div>
             <div class="category-operation-body">
               <div class="d-flex align-items-center justify-content-between each-category" v-for="(operation, index) in operationCategories" :key="index"
-                   :class="activeRoute(operation) ? 'each-category-active' : ''" v-on:click="pickCategoryOperation(operation)">
+                   :class="activeRoute(operation) ? 'each-category-active' : ''" v-on:click="pickCategoryOperation(operation)"
+                   v-if="$auth.user[0].role < operation.role || operation == 1">
                 <div>{{operation.text}}</div>
               </div>
             </div>
@@ -38,24 +39,25 @@
             return {
                 showMenu: 0,
                 operationCategories: [
-                    {id: 0, text: 'Tình hình nhập liệu', point: 0, order: 0, subOrder: 0, route: '/home'},
-                    {id: 1, text: 'Quản lý tỉnh/thành phố', point: 0, order: 0, subOrder: 0, route: '/province'},
-                    {id: 2, text: 'Quản lý quận/huyện', point: 0, order: 0, subOrder: 0, route: '/district'},
-                    {id: 3, text: 'Quản lý phường/xã', point: 0, order: 0, subOrder: 0, route: '/ward'},
-                    {id: 4, text: 'Quản lý thôn/bản/tổ dân phố', point: 0, order: 0, subOrder: 0, route: '/hamlet'},
-                    {id: 5, text: 'Quản lý tài khoản', point: 0, order: 0, subOrder: 0, route: '/account'},
-                    {id: 6, text: 'Quản lý dân số', point: 0, order: 0, subOrder: 0, route: '/citizen'},
+                    {id: 0, text: 'Tình hình nhập liệu', route: '/home', role: 1},
+                    {id: 1, text: 'Quản lý tỉnh/thành phố', route: '/province', role: 2},
+                    {id: 2, text: 'Quản lý quận/huyện', route: '/district', role: 3},
+                    {id: 3, text: 'Quản lý phường/xã', route: '/ward', role: 4},
+                    {id: 4, text: 'Quản lý thôn/bản/tổ dân phố', route: '/hamlet', role:5},
+                    {id: 5, text: 'Quản lý tài khoản', route: '/account', role: 5},
+                    {id: 6, text: 'Quản lý dân số', route: '/citizen', role: 6},
                 ],
 
                 isFilterLoading: false,
                 date: new Date(moment().format('YYYY-MM-DD')),
-                sessionIsSlected: null,
-                districtsAreSelected: [],
-                isShowFilter: false
             }
         },
 
-        mounted() {
+      created() {
+        console.log(this.$auth.user[0].role);
+      },
+
+      mounted() {
         },
 
         methods: {
@@ -66,8 +68,8 @@
           pickCategoryOperation(operation) {
             this.$router.push(operation.route);
           },
+
           activeRoute(operation) {
-            console.log($nuxt.$route.path);
             if ($nuxt.$route.path.includes(operation.route)) return true
             return false
           }

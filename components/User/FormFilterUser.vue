@@ -8,22 +8,58 @@
       <div class="card create-card-main">
         <div class="card-body">
           <div class="form-row align-items-center">
-            <div class="col-sm-3 my-1 title-form">
-              Tên tỉnh/thành phố
+            <div class="col-sm-2 my-1 title-form">
+              Mật khẩu
             </div>
             <div class="col-sm-9 my-1">
-              <input type="text" class="form-control mb-2 mr-sm-2" id="province" placeholder="Nhập tên tỉnh/thành phố" v-model="name">
+              <input type="text" class="form-control mb-2 mr-sm-2" id="province" placeholder="Nhập password" v-model="password">
             </div>
           </div>
-          <div class="form-row align-items-center">
-            <div class="col-sm-3 my-1 title-form">
-              Mã code
+          <div class="form-row align-items-center mt-3">
+            <div class="col-sm-2 my-1 title-form">
+              Trạng thái
             </div>
             <div class="col-sm-9 my-1">
-              <input type="text" class="form-control mb-2 mr-sm-2" id="campaign" placeholder="Nhập mã code" v-model="code">
+              <toggle-button
+                :value="status"
+                @change="onChangeEventHandler"
+                :labels="{checked: 'Mở', unchecked: 'Khóa'}"
+                width=65
+                height=30
+                font-size=12
+              >
+              </toggle-button>
             </div>
           </div>
-          <button-custom class="btn button-save" :is-spinner="isActionLoading" classIcon="fa fa-save" buttonName="Lưu" @submitEvent="actionType == 'add' ? onAdd(): onEdit()" ></button-custom>
+          <div class="form-row align-items-center mt-3">
+            <div class="col-sm-2 my-1 title-form">
+              Thời gian khai báo
+            </div>
+            <div class="col-sm-1 my-1 title-form">
+              Bắt đầu
+            </div>
+            <div class="col-sm-3 my-1">
+              <date-picker
+                v-model="start"
+                format="YYYY-MM-DD HH:mm:ss"
+                type="datetime"
+                placeholder="Nhập ngày bắt đầu"
+              ></date-picker>
+            </div>
+            <span style="font-size: 20px; font-weight: bold" class="ml-3">~</span>
+            <div class="col-sm-1 my-1 title-form ml-3">
+              Kết thúc
+            </div>
+            <div class="col-sm-3 my-1">
+              <date-picker
+                v-model="finish"
+                format="YYYY-MM-DD HH:mm:ss"
+                type="datetime"
+                placeholder="Nhập ngày kết thúc"
+              ></date-picker>
+            </div>
+          </div>
+          <button-custom class="btn button-save" :is-spinner="isActionLoading" classIcon="fa fa-save" buttonName="Lưu" @submitEvent="onEdit()" ></button-custom>
         </div>
       </div>
     </div>
@@ -33,7 +69,9 @@
 import moment from 'moment'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
-import {help} from "../../plugins/mixins/help"
+import {help} from "../../plugins/mixins/help";
+import {ToggleButton} from 'vue-js-toggle-button';
+
 export default {
   name: "FormFilterUser",
 
@@ -43,7 +81,8 @@ export default {
   ],
 
   components: {
-    DatePicker
+    DatePicker,
+    ToggleButton
   },
 
   mixins: [help],
@@ -52,39 +91,39 @@ export default {
     return {
       isLoading: false,
       isActionLoading: false,
-      name: '',
-      code: ''
+      password: '',
+      status: '',
+      start: '',
+      finish: ''
     }
   },
 
   created() {
     if (this.actionType == 'edit') {
-      this.name = this.rowIsSelected.name;
-      this.code = this.rowIsSelected.code;
+      this.status = this.rowIsSelected.status;
+      this.start = new Date(moment(this.rowIsSelected.time_start).format('YYYY-MM-DD HH:mm:ss'));
+      this.finish = new Date(moment(this.rowIsSelected.time_finish).format('YYYY-MM-DD HH:mm:ss'));
     }
   },
 
   methods: {
-
-    onAdd() {
-      this.createOrUpdate('province/insertProvince');
-    },
-
     onEdit() {
-      this.createOrUpdate('province/updateProvince');
+      this.createOrUpdate('user/updateUser');
     },
 
     createOrUpdate(url) {
       this.isActionLoading = true;
 
-      let formData = new FormData()
+      let formData = new FormData();
       if (this.actionType == 'edit') {
-        formData.set('id', this.rowIsSelected.id);
+        formData.append('user_id', this.rowIsSelected.id);
       }
 
-      formData.set('name', this.name);
-      formData.set('code', this.code);
-
+      formData.append('password', this.password);
+      formData.append('status', this.status == true ? 1 : 0);
+      formData.append('time_start', moment(this.start).format('YYYY-MM-DD HH:mm:ss'));
+      formData.append('time_finish', moment(this.finish).format('YYYY-MM-DD HH:mm:ss'));
+      console.log(formData.get('time_start'));
       this.$store.dispatch(url, formData).then(response => {
         if (response.data.success) {
           this.goBack();
@@ -99,6 +138,10 @@ export default {
     goBack() {
       this.$emit('goBackEvent');
     },
+
+    onChangeEventHandler(value) {
+      this.status = value.value;
+    }
   }
 }
 </script>

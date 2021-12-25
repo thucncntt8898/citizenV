@@ -5,28 +5,25 @@
       <tr>
         <th width="10%">Username</th>
         <th width="10%">Tỉnh/thành phố</th>
-        <th width="10%">Quận/huyện</th>
-        <th width="10%">Phường/Xã</th>
-        <th width="10%">Xóm/thôn/bản</th>
+        <th width="10%" v-if="role >= 2">Quận/huyện</th>
+        <th width="10%" v-if="role >= 3">Phường/Xã</th>
+        <th width="10%" v-if="role >= 4">Xóm/thôn/bản</th>
         <th width="10%">Trạng thái</th>
         <th width="25%">Thời gian khai báo</th>
-        <th width="15%">Thao tác</th>
+        <th width="10%">Thao tác</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="(user, index) in users" :key="index">
         <td>{{user.username}}</td>
         <td>{{user.province_name}}</td>
-        <td>{{user.district_name}}</td>
-        <td>{{user.ward_name}}</td>
-        <td>{{user.hamlet_name}}</td>
+        <td v-if="role >= 2">{{user.district_name}}</td>
+        <td v-if="role >= 3">{{user.ward_name}}</td>
+        <td v-if="role >= 4">{{user.hamlet_name}}</td>
         <td>{{user.status == 1 ? 'Mở' : 'Khóa'}}</td>
         <td>{{user.time_start}} ~ {{user.time_finish}}</td>
         <td>
-          <div class="d-flex">
-            <button type="button" class="btn btn-apply-outline-ghtk col-6" v-on:click="updateEvent(user)"><i class="fa fa-edit"></i> Sửa</button>
-            <button type="button" class="btn btn-outline-danger col-6 ml-1" v-on:click="deleteEvent(index)"><i class="fa fa-trash"></i> Xóa</button>
-          </div>
+            <button type="button" class="btn btn-apply-outline-ghtk" v-on:click="updateEvent(user)"><i class="fa fa-edit"></i> Sửa</button>
         </td>
       </tr>
       </tbody>
@@ -39,6 +36,16 @@ export default {
   props: [
     'users'
   ],
+
+  data() {
+    return {
+      'role': 0,
+    }
+  },
+
+  created() {
+    this.role = this.$auth.user[0].role;
+  },
 
   methods: {
     deleteEvent(index) {

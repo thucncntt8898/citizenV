@@ -80,7 +80,7 @@
 </script>
 
 <style scoped lang="scss">
-  $ghtk_color: #058f49;
+  $color: #058f49;
   .row-cus {
     display: flex;
     align-items: center;
@@ -128,13 +128,13 @@
         }
 
         .form-control:focus {
-          border-color: $ghtk_color;
-          box-shadow: 0 0 0 0.01rem $ghtk_color;
+          border-color: $color;
+          box-shadow: 0 0 0 0.01rem $color;
         }
 
         .d-flex {
           .btn-ghtk {
-            background-color: $ghtk_color;
+            background-color: $color;
             color: white;
             width: 60%;
             font-size: .894rem;

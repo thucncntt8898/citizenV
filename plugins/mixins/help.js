@@ -25,5 +25,10 @@ export const help = {
         return pageCount
       },
 
+      disabledAfterToday(date) {
+        const today = new Date();
+        return date > today;
+      },
+
     }
 }

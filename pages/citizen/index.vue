@@ -1,13 +1,13 @@
 <template>
   <div id="general-situation-operator-main">
-    <main-user>
-    </main-user>
+    <main-citizen>
+    </main-citizen>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import MainUser from "../../components/User/MainUser.vue";
+import MainCitizen from "../../components/Citizen/MainCitizen.vue";
 
 export default {
   name: "index",
@@ -21,7 +21,7 @@ export default {
   middleware: 'authenticated',
 
   components: {
-    MainUser
+    MainCitizen
   },
 
   data() {
