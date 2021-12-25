@@ -1,7 +1,7 @@
 <template>
   <div id="general-situation-operator-main">
-    <main-hamlet>
-    </main-hamlet>
+    <main-ward>
+    </main-ward>
   </div>
 </template>
 

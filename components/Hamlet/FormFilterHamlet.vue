@@ -9,13 +9,13 @@
         <div class="card-body">
           <div class="form-row align-items-center">
             <div class="col-sm-3 my-1 title-form">
-              Tên tỉnh/thành phố
+              Tên thôn/bản/tổ dân phố
             </div>
             <div class="col-sm-9 my-1">
-              <input type="text" class="form-control mb-2 mr-sm-2" id="province" placeholder="Nhập tên tỉnh/thành phố" v-model="name">
+              <input type="text" class="form-control mb-2 mr-sm-2" id="hamlet" placeholder="Nhập tên thôn/bản/tổ dân phố" v-model="name">
             </div>
           </div>
-          <div class="form-row align-items-center">
+          <div class="form-row align-items-center" v-if="!(this.actionType == 'edit')">
             <div class="col-sm-3 my-1 title-form">
               Mã code
             </div>
@@ -35,7 +35,7 @@ import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import {help} from "../../plugins/mixins/help"
 export default {
-  name: "FormFilterUser",
+  name: "FormFilterHamlet",
 
   props: [
     'actionType',
@@ -67,11 +67,11 @@ export default {
   methods: {
 
     onAdd() {
-      this.createOrUpdate('province/insertProvince');
+      this.createOrUpdate('hamlet/insertHamlet');
     },
 
     onEdit() {
-      this.createOrUpdate('province/updateProvince');
+      this.createOrUpdate('hamlet/updateHamlet');
     },
 
     createOrUpdate(url) {
