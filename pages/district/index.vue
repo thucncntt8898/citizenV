@@ -1,13 +1,14 @@
 <template>
   <div id="general-situation-operator-main">
-    <main-user>
-    </main-user>
+    <main-district>
+    </main-district>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import MainUser from "../../components/User/MainUser.vue";
+import MainDistrict from "../../components/District/MainDistrict.vue";
+import MainUser from "@/components/User/MainUser";
 
 export default {
   name: "index",
