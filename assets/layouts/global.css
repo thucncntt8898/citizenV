@@ -1,0 +1,17 @@
+@font-face {
+  font-family: "FS-North-Land";
+  src: local("FS-North-Land"),
+  url(~assets/FS-North-Land/FS-North-Land.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "FS-North-Land-Sans";
+  src: local("FS-North-Land-Sans"),
+  url(~assets/FS-North-Land/FS-North-Land-Sans.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "BonFoyage";
+  src: local("BonFoyage"),
+  url(~assets/BonFoyageVH/BonFoyage.otf) format("opentype");
+}

@@ -15,7 +15,7 @@
               <input type="text" class="form-control mb-2 mr-sm-2" id="province" placeholder="Nhập tên tỉnh/thành phố" v-model="name">
             </div>
           </div>
-          <div class="form-row align-items-center">
+          <div class="form-row align-items-center" v-if="!(this.actionType == 'edit')">
             <div class="col-sm-3 my-1 title-form">
               Mã code
             </div>
@@ -53,7 +53,8 @@ export default {
       isLoading: false,
       isActionLoading: false,
       name: '',
-      code: ''
+      code: '',
+      showAction: this.getShowAction()
     }
   },
 
@@ -65,7 +66,9 @@ export default {
   },
 
   methods: {
-
+    getShowAction() {
+      return this.$auth.user[0].role === 1;
+    },
     onAdd() {
       this.createOrUpdate('province/insertProvince');
     },
