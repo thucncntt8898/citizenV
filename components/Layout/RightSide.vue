@@ -53,18 +53,10 @@
             }
         },
 
-      created() {
-        console.log(this.$auth.user[0].role);
-      },
-
       mounted() {
         },
 
         methods: {
-            showMenuList() {
-                this.showMenu = !this.showMenu
-                this.isShowFilter = false
-            },
           pickCategoryOperation(operation) {
             this.$router.push(operation.route);
           },

@@ -2,18 +2,20 @@
   <div id="form-config-xstar-id">
     <div class="row update-header">
       <i class="ico-go-back fa fa-arrow-left" title="Quay lại" v-on:click="goBack"></i>
-      <h5 class="">{{actionType == 'add' ? 'Thêm mới' : 'Chỉnh sửa'}}</h5>
+      <h5>{{actionType == 'add' ? 'Thêm mới' : 'Chỉnh sửa'}}</h5>
     </div>
     <div class="container">
       <div class="card create-card-main">
         <div class="card-body">
+          <span class="error-span" v-if="errorInputs.permanent_address_hamlet">{{errorInputs.permanent_address_hamlet}}</span>
           <div class="form-row align-items-center">
             <div class="col-sm-3 my-1 title-form">
               CMT/CCCD
             </div>
             <div class="col-sm-9 my-1">
-              <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Nhập tên CMT/CCCD" v-model="idCard">
-              <span>Lỗi</span>
+              <input type="text"
+                     class="form-control mb-2 mr-sm-2" placeholder="Nhập tên CMT/CCCD" v-model="idCard" :class="errorInputs.id_card ? 'error-input' : ''">
+              <span class="error-span" v-if="errorInputs.id_card">{{errorInputs.id_card}}</span>
             </div>
           </div>
           <div class="form-row align-items-center">
@@ -21,7 +23,8 @@
              Họ và tên
             </div>
             <div class="col-sm-9 my-1">
-              <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Nhập họ tên" v-model="fullname">
+              <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Nhập họ tên" v-model="fullname" :class="errorInputs.fullname ? 'error-input' : ''">
+              <span class="error-span" v-if="errorInputs.fullname">{{errorInputs.fullname}}</span>
             </div>
           </div>
           <div class="form-row align-items-center">
@@ -35,7 +38,9 @@
                 type="date"
                 placeholder="Nhập ngày sinh"
                 :disabled-date="disabledAfterToday"
+                :class="errorInputs.dob ? 'error-input' : ''"
               ></date-picker>
+              <span class="error-span" v-if="errorInputs.dob">{{errorInputs.dob}}</span>
             </div>
           </div>
           <div class="form-row align-items-center">
@@ -53,8 +58,10 @@
                 placeholder="Chọn giới tính"
                 label="name"
                 track-by="id"
+                :class="errorInputs.gender ? 'error-input' : ''"
               >
               </vue-multiselect>
+              <span class="error-span" v-if="errorInputs.gender">{{errorInputs.gender}}</span>
             </div>
           </div>
           <div class="form-row align-items-center">
@@ -62,7 +69,8 @@
               Quê quán
             </div>
             <div class="col-sm-9 my-1">
-              <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Nhập quê quán" v-model="nativeAddress">
+              <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Nhập quê quán" v-model="nativeAddress" :class="errorInputs.native_address">
+              <span class="error-span" v-if="errorInputs.native_address">{{errorInputs.native_address}}</span>
             </div>
           </div>
           <div class="form-row align-items-center">
@@ -78,7 +86,8 @@
               Địa chỉ tạm trú
             </div>
             <div class="col-sm-9 my-1">
-              <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Nhập địa chỉ tạm trú" v-model="tempAddress">
+              <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Nhập địa chỉ tạm trú" v-model="tempAddress" :class="errorInputs.temp_address">
+              <span class="error-span" v-if="errorInputs.temp_address">{{errorInputs.temp_address}}</span>
             </div>
           </div>
           <div class="form-row align-items-center">
@@ -112,8 +121,10 @@
                 placeholder="Chọn nghề nghiệp"
                 label="name"
                 track-by="id"
+                :class="errorInputs.occupation"
               >
               </vue-multiselect>
+              <span class="error-span" v-if="errorInputs.occupation">{{errorInputs.occupation}}</span>
             </div>
           </div>
           <button-custom class="btn button-save" :is-spinner="isActionLoading" classIcon="fa fa-save" buttonName="Lưu" @submitEvent="actionType == 'add' ? onAdd(): onEdit()" ></button-custom>
@@ -150,7 +161,7 @@ export default {
       isActionLoading: false,
       idCard: '',
       fullname: '',
-      dob: new Date(moment().format('YYYY-MM-DD')),
+      dob: '',
       gender: {id: 0, name: 'Nữ'},
       nativeAddress: '',
       tempAddress: '',
@@ -164,15 +175,16 @@ export default {
       permanentAddress: this.$auth.user[0]['hamlet']['name'] + ', ' + this.$auth.user[0]['ward']['name'] + ', ' + this.$auth.user[0]['district']['name'] + ', ' + this.$auth.user[0]['province']['name'],
       listOccupations: [],
       errorInputs: {
-        idCard: '',
+        id_card: '',
         fullname: '',
         dob: '',
         gender: '',
-        nativeAddress: '',
-        tempAddress: '',
+        native_address: '',
+        temp_address: '',
         religion: '',
         eduLevel: '',
         occupation: '',
+        permanent_address_hamlet: ''
       }
     }
   },
@@ -217,7 +229,7 @@ export default {
 
       formData.set('id_card', this.idCard);
       formData.set('fullname', this.fullname);
-      formData.set('dob', moment(this.dob).format('YYYY-MM-DD'));
+      formData.set('dob', this.dob == '' ? '' : moment(this.dob).format('YYYY-MM-DD'));
       formData.set('gender', this.gender.id);
       formData.set('native_address', this.nativeAddress);
       formData.set('temp_address', this.tempAddress);
@@ -234,23 +246,18 @@ export default {
           this.goBack();
           this.$toast.success(response.data.message);
         } else {
-          this.$toast.error(response.data.message);
+          let errors = response.data.errors;
+          let fields = ['id_card', 'gender', 'fullname', 'dob', 'edu_level', 'occupation', 'religion', 'native_address', 'temp_address', 'permanent_address_hamlet'];
+          fields.forEach(field => {
+            if (errors[field]) {
+              this.errorInputs[field] = errors[field][0];
+            }
+          });
         }
       }).catch(function (error) {
         let errors = error.response.data.errors;
-        this.addError(errors);
       });
       this.isActionLoading = false;
-    },
-
-    addError(errors) {
-      let fields = ['id_card', 'gender', 'fullname', 'dob', 'edu_level', 'occupation', 'religion', 'native_address', 'temp_address'];
-      fields.forEach(field => {
-        if (errors[field]) {
-          this.errorInputs[field] = errors[field][0];
-        }
-      });
-      console.log(this.errorInputs);
     },
 
     goBack() {
@@ -309,5 +316,15 @@ $ghtk_color: #058f49;
     margin-left: 5px;
     margin-bottom: 1px;
   }
+}
+
+.error-span {
+  font-size: 12px;
+  font-style: italic;
+  color: red;
+}
+
+.error-input {
+  border-color: red;
 }
 </style>

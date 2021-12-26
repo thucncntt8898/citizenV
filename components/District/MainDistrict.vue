@@ -4,14 +4,13 @@
       <div class="col-10 filter-area mb-1">
         <h4>Quản lý quận huyện </h4>
       </div>
-      <div class="col-2 filter-area mb-1">
-        <button-custom class="btn-add" classIcon="fa fa-plus-circle" buttonName="Thêm mới" @submitEvent="createEvent()"></button-custom>
-      </div>
     </div>
     <div v-if="step == 1">
       <table-district
-        :districts="districts"
+        :listDistricts="listDistricts"
+        :isLoadingDistrict="isLoadingDistrict"
         @handleUpdateEvent="updateEvent"
+        @handleFilter="handleFilter"
       ></table-district>
       <div class="row">
         <div class="col-2">
@@ -58,7 +57,6 @@ export default {
   components: {TableDistrict, FormFilterDistrict},
 
   created() {
-    this.getListDistricts();
   },
 
   mixins: [help],
@@ -66,12 +64,12 @@ export default {
   data() {
     return {
       isLoadingDistrict: false,
-      districts: [],
+      listDistricts: [],
       currentPage: 1,
       limit: 10,
       province_id: this.$auth.user.province_id,
       pageCount: 0,
-      paramsReq: {},
+      paramReq: {},
       step: 1,
       rowIsSelected: {},
       actionType: 'add',
@@ -129,6 +127,28 @@ export default {
     handleSelectPageEvent(page) {
       this.currentPage = page;
       this.getListDistricts('paginate');
+    },
+
+    handleFilter(paramReq, type = 'filter') {
+      this.isLoadingDistrict = true;
+      this.paramReq = paramReq;
+      if (type == 'filter') {
+        this.currentPage = 1;
+      }
+      this.paramReq.page = this.currentPage;
+      this.paramReq.limit = 10;
+      this.$store.dispatch('district/getListDistricts', this.paramReq).then(response => {
+        if (response.data.success) {
+          this.listDistricts = response.data.data.data_list;
+          let total = response.data.data.count;
+          this.currentTotal = this.listDistricts.length;
+          this.countAll = total;
+          this.pageCount = this.getPageCount(total, this.limit);
+        } else {
+          this.$toast.error('Lỗi.');
+        }
+        this.isLoadingDistrict = false;
+      })
     }
   }
 }

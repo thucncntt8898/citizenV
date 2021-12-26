@@ -4,14 +4,13 @@
       <div class="col-10 filter-area mb-1">
         <h4>Quản lý tỉnh/thành phố</h4>
       </div>
-      <div class="col-2 filter-area mb-1">
-        <button-custom class="btn-add" classIcon="fa fa-plus-circle" buttonName="Thêm mới" @submitEvent="createEvent()"></button-custom>
-      </div>
     </div>
     <div v-if="step == 1">
       <table-province
         :provinces="provinces"
+        :isLoadingDistrict="isLoadingProvince"
         @handleUpdateEvent="updateEvent"
+        @handleFilter="handleFilter"
       ></table-province>
       <div class="row">
         <div class="col-2">
@@ -76,38 +75,12 @@ export default {
       actionType: 'add',
       countAll: 0,
       currentTotal: 0,
-      paramReq: {}
+      paramReq: {},
+      listProvinces: []
     }
   },
 
   methods: {
-    getListProvinces(type='filter') {
-      if(type == 'filter') {
-        this.currentPage = 1
-      }
-
-      this.isLoadingProvince = true
-
-      let paramRequired = {
-        'page': this.currentPage,
-        'limit': this.limit
-      }
-
-      this.paramReq = paramRequired;
-      this.$store.dispatch('province/getListProvinces', paramRequired).then(response => {
-        if (response.data.success) {
-          this.provinces = response.data.data.data_list;
-          let total = response.data.data.count;
-          this.currentTotal = this.provinces.length;
-          this.countAll = total;
-          this.pageCount = this.getPageCount(total, this.limit);
-        } else {
-          this.$toast.error('Lỗi.');
-        }
-        this.isLoadingProvince = false;
-      })
-    },
-
     createEvent() {
       this.step = 2;
       this.actionType = 'add';
@@ -128,6 +101,28 @@ export default {
     handleSelectPageEvent(page) {
       this.currentPage = page;
       this.getListProvinces('paginate');
+    },
+
+    handleFilter(paramReq, type = 'filter') {
+      this.isLoadingProvince = true;
+      this.paramReq = paramReq;
+      if (type == 'filter') {
+        this.currentPage = 1;
+      }
+      this.paramReq.page = this.currentPage;
+      this.paramReq.limit = 10;
+      this.$store.dispatch('province/getListProvinces', this.paramReq).then(response => {
+        if (response.data.success) {
+          this.listProvinces = response.data.data.data_list;
+          let total = response.data.data.count;
+          this.currentTotal = this.listDistricts.length;
+          this.countAll = total;
+          this.pageCount = this.getPageCount(total, this.limit);
+        } else {
+          this.$toast.error('Lỗi.');
+        }
+        this.isLoadingProvince = false;
+      })
     }
   }
 }
