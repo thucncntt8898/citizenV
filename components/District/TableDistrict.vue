@@ -51,7 +51,7 @@
           <div class="form-row align-items-center">
             <div class="col-sm-12 my-1">
               <button-custom class="btn-add" classIcon="fa fa-plus-circle" buttonName="Thêm mới"
-                             @submitEvent="createEvent()" v-if="user.role == 2 && checkUserPermission()"></button-custom>
+                             @submitEvent="createEvent()"></button-custom>
               <button-custom class="btn-filter" backgroundColor="#058f49" classIcon="fa fa-search"
                              :is-spinner="isLoadingDistrict" @submitEvent="filter()"
                              buttonName="Tìm kiếm"></button-custom>
