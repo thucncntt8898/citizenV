@@ -145,15 +145,6 @@ table {
   }
 }
 
-body {
-  padding: 0 2em;
-  font-family: Montserrat, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  color: #444;
-  background: #eee;
-}
-
 h1 {
   font-weight: normal;
   letter-spacing: -1px;

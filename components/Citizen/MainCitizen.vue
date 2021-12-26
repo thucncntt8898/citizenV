@@ -11,8 +11,8 @@
         <toggle-button
           :value="status"
           @change="onChangeEventHandler"
-          :labels="{checked: 'Đone', unchecked: 'Doing'}"
-          width=65
+          :labels="{checked: 'Done', unchecked: 'Doing'}"
+          width=75
           height=30
           font-size=12
         >

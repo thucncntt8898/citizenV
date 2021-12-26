@@ -6,6 +6,7 @@
     <a href="#default" class="logo" id="header-logo">CitizenV</a>
     <div class="header-right">
       <span class="name-user">
+        {{ this.$auth.user[0].role == 1 ? 'Tổng cục Dân số thuộc Bộ Y tế' : '' }}
         {{ this.$auth.user[0].province != null ? this.$auth.user[0].province.name : '' }}
         {{ this.$auth.user[0].district != null ? ' / '+this.$auth.user[0].district.name : '' }}
         {{ this.$auth.user[0].ward != null ? ' / '+this.$auth.user[0].ward.name : '' }}
