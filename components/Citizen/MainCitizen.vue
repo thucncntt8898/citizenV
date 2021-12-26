@@ -1,8 +1,22 @@
 <template>
   <div id="manage-province-id">
     <div class="row" v-if="step == 1">
-      <div class="col-10 filter-area mb-1">
+      <div class="col-8 filter-area mb-1">
         <h4>Quản lý dân số</h4>
+      </div>
+      <div class="col-2 my-1 title-form">
+        Trạng thái khai báo
+      </div>
+      <div class="col-2 my-1">
+        <toggle-button
+          :value="status"
+          @change="onChangeEventHandler"
+          :labels="{checked: 'Đone', unchecked: 'Doing'}"
+          width=65
+          height=30
+          font-size=12
+        >
+        </toggle-button>
       </div>
     </div>
     <div v-if="step == 1">
@@ -44,6 +58,8 @@ import PaginationCustom from "../Common/PaginationCustom.vue";
 import showTextEntries from "../Common/showTextEntries.vue";
 import TableCitizen from "./TableCitizen.vue";
 import {help} from "../../plugins/mixins/help.js";
+import {ToggleButton} from 'vue-js-toggle-button';
+
 
 export default {
   name: "MainCitizen",
@@ -54,9 +70,10 @@ export default {
 
   middleware: 'authenticated',
 
-  components: {TableCitizen, FormFilterCitizen},
+  components: {TableCitizen, FormFilterCitizen, ToggleButton},
 
   created() {
+    this.status = this.$auth.user[0].is_completed;
   },
 
   mixins: [help],
@@ -78,11 +95,34 @@ export default {
       districts: [],
       wards: [],
       hamlets: [],
-      paramReq: {}
+      paramReq: {},
+      status: 'false',
     }
   },
 
   methods: {
+    onChangeEventHandler(value) {
+      this.status = value.value;
+      console.log(this.status);
+      this.$swal({
+         title: (this.status) ? 'Bạn có muốn hoàn thành việc khai báo dân số ?' : 'Bạn có muốn tiếp tục việc khai báo dân số ?',
+      }).then((result) => {
+        this.isActionLoading = true;
+
+        let formData = new FormData()
+
+        formData.set('status', this.status);
+
+        this.$store.dispatch('hamlet/completeStatistical', formData).then(response => {
+          if (response.data.success) {
+            this.$toast.success(response.data.message);
+          } else {
+            this.$toast.error(response.data.message);
+          }
+          this.isActionLoading = false;
+        })
+      });
+    },
     handleAddCitizen() {
       this.step = 2;
       this.actionType = 'add';
