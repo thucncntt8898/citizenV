@@ -5,7 +5,7 @@
         <h4>Quản lý dân số</h4>
       </div>
       <div class="col-2 my-1 title-form">
-        Trạng thái khai báo
+        <span style="font-weight: 600; font-size: 16px; font-style: italic;">Trạng thái khai báo</span>
       </div>
       <div class="col-2 my-1">
         <toggle-button
@@ -45,6 +45,8 @@
         :rowIsSelected="rowIsSelected"
         :actionType="actionType"
         @goBackEvent="handleGoBackEvent"
+        :citizen="rowIsSelected"
+        :occupations="occupations"
       >
       </FormFilterCitizen>
     </div>
@@ -74,6 +76,7 @@ export default {
 
   created() {
     this.status = this.$auth.user[0].is_completed;
+    this.getListOccupations();
   },
 
   mixins: [help],
@@ -97,30 +100,43 @@ export default {
       hamlets: [],
       paramReq: {},
       status: 'false',
+      occupations: [],
     }
   },
 
   methods: {
+    getListOccupations() {
+      this.paramReq = {
+        name: this.occupation
+      }
+      this.$store.dispatch('citizen/getListOccupations', this.paramReq).then(response => {
+        if (response.data.success) {
+          this.occupations = response.data.data;
+        } else {
+          this.$toast.error('Lỗi.');
+        }
+      })
+    },
     onChangeEventHandler(value) {
       this.status = value.value;
-      console.log(this.status);
       this.$swal({
          title: (this.status) ? 'Bạn có muốn hoàn thành việc khai báo dân số ?' : 'Bạn có muốn tiếp tục việc khai báo dân số ?',
       }).then((result) => {
-        this.isActionLoading = true;
+        if (result.isConfirmed) {
+          let formData = new FormData()
 
-        let formData = new FormData()
+          formData.set('status', this.status);
 
-        formData.set('status', this.status);
-
-        this.$store.dispatch('hamlet/completeStatistical', formData).then(response => {
-          if (response.data.success) {
-            this.$toast.success(response.data.message);
-          } else {
-            this.$toast.error(response.data.message);
-          }
-          this.isActionLoading = false;
-        })
+          this.$store.dispatch('hamlet/completeStatistical', formData).then(response => {
+            if (response.data.success) {
+              this.$toast.success(response.data.message);
+            } else {
+              this.$toast.error(response.data.message);
+            }
+          })
+        } else {
+          // this.status = 'false';
+        }
       });
     },
     handleAddCitizen() {

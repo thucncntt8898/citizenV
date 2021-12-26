@@ -165,6 +165,7 @@
                   classIcon="fa fa-plus-circle"
                   buttonName="Thêm mới"
                   @submitEvent="create()"
+                  v-if="user.role == 5 && checkUserPermission"
                 >
                 </button-custom>
               </div>
@@ -185,12 +186,12 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(citizen, index) in citizens" :key="index">
+      <tr v-for="(citizen, index) in citizens" :key="index" style="cursor: pointer" v-on:click="getInfoCitizen(index)">
         <td>{{citizen.id_card}}</td>
         <td>{{citizen.fullname}}</td>
         <td>{{citizen.dob}}</td>
         <td>{{citizen.gender == 0 ? 'Nữ' : 'Nam'}}</td>
-        <td>
+        <td v-if="user.role == 5 && checkUserPermission">
           <div class="d-flex">
             <button type="button" class="btn btn-apply-outline-ghtk col-6" v-on:click="updateEvent(citizen)"><i class="fa fa-edit"></i> Sửa</button>
             <button type="button" class="btn btn-outline-danger col-6 ml-1" v-on:click="deleteEvent(index)"><i class="fa fa-trash"></i> Xóa</button>
@@ -199,6 +200,8 @@
       </tr>
       </tbody>
     </table>
+    <modal-info-citizen :citizen="citizenIsSelected">
+    </modal-info-citizen>
   </div>
 </template>
 <script>
@@ -206,6 +209,7 @@ import moment from 'moment'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import {help} from "../../plugins/mixins/help.js";
+import ModalInfoCitizen from "./ModalInfoCitizen.vue";
 export default {
   name: "TableUser",
   props: [
@@ -214,7 +218,8 @@ export default {
   ],
 
   components: {
-    DatePicker
+    DatePicker,
+    ModalInfoCitizen
   },
 
   created() {
@@ -252,6 +257,7 @@ export default {
       wards: [],
       hamlets: [],
       page: 1,
+      citizenIsSelected: {},
     }
   },
 
@@ -271,8 +277,8 @@ export default {
       this.$emit('handleAddCitizen');
     },
 
-    update() {
-
+    getInfoCitizen(citizen) {
+      this.citizenIsSelected = citizen;
     },
 
     disabledAfterToday(date) {

@@ -121,7 +121,7 @@
                 placeholder="Chọn nghề nghiệp"
                 label="name"
                 track-by="id"
-                :class="errorInputs.occupation"
+                :class="errorInputs.occupation ? 'error-input' : ''"
               >
               </vue-multiselect>
               <span class="error-span" v-if="errorInputs.occupation">{{errorInputs.occupation}}</span>
@@ -145,7 +145,8 @@ export default {
   props: [
     'actionType',
     'rowIsSelected',
-    'citizen'
+    'citizen',
+    'occupations'
   ],
 
   components: {
@@ -173,7 +174,7 @@ export default {
         {id: 1, name: 'Nam'},
       ],
       permanentAddress: this.$auth.user[0]['hamlet']['name'] + ', ' + this.$auth.user[0]['ward']['name'] + ', ' + this.$auth.user[0]['district']['name'] + ', ' + this.$auth.user[0]['province']['name'],
-      listOccupations: [],
+      listOccupations: this.occupations,
       errorInputs: {
         id_card: '',
         fullname: '',
@@ -184,33 +185,26 @@ export default {
         religion: '',
         eduLevel: '',
         occupation: '',
-        permanent_address_hamlet: ''
+        permanent_address_hamlet: '',
       }
     }
   },
 
   created() {
-    this.getListOccupations();
     if (this.actionType == 'edit') {
-      this.name = this.rowIsSelected.name;
-      this.code = this.rowIsSelected.code;
+      this.idCard = this.rowIsSelected.id_card;
+      this.fullname = this.rowIsSelected.fullname;
+      this.dob = new Date(moment(this.rowIsSelected.dob).format('YYYY-MM-DD'));
+      this.gender = this.rowIsSelected.gender == 0 ? this.genderTypes[0] : this.genderTypes[1];
+      this.nativeAddress = this.rowIsSelected.native_address;
+      this.tempAddress = this.rowIsSelected.temp_address;
+      this.religion = this.rowIsSelected.religion;
+      this.eduLevel = this.rowIsSelected.edu_level;
+      this.occupation = this.occupations.filter(oc => {return oc.id == this.rowIsSelected.occupation})[0];
     }
   },
 
   methods: {
-    getListOccupations() {
-      this.paramReq = {
-        name: this.occupation
-      }
-      this.$store.dispatch('citizen/getListOccupations', this.paramReq).then(response => {
-        if (response.data.success) {
-          this.listOccupations = response.data.data;
-        } else {
-          this.$toast.error('Lỗi.');
-        }
-      })
-    },
-
     onAdd() {
       this.createOrUpdate('citizen/insertCitizen');
     },
@@ -255,7 +249,7 @@ export default {
           });
         }
       }).catch(function (error) {
-        let errors = error.response.data.errors;
+        console.log(error);
       });
       this.isActionLoading = false;
     },
