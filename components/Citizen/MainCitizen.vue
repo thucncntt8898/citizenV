@@ -2,7 +2,7 @@
   <div id="manage-province-id">
     <div class="row" v-if="step == 1">
       <div class="col-10 filter-area mb-1">
-        <h4>Quản lý tài khoản</h4>
+        <h4>Quản lý dân số</h4>
       </div>
     </div>
     <div v-if="step == 1">
@@ -10,6 +10,7 @@
         :citizens="citizens"
         @handleUpdateEvent="updateEvent"
         @handleAddCitizen="handleAddCitizen"
+        @handleFilterCitizen="getListCitizens"
       ></table-citizen>
       <div class="row">
         <div class="col-2">
@@ -56,7 +57,6 @@ export default {
   components: {TableCitizen, FormFilterCitizen},
 
   created() {
-    this.getListCitizens();
   },
 
   mixins: [help],
@@ -83,35 +83,6 @@ export default {
   },
 
   methods: {
-    getListCitizens(type='filter') {
-      if(type == 'filter') {
-        this.currentPage = 1
-      }
-
-      this.isLoadingCitizen = true
-
-      this.paramReq = {
-        'page': this.currentPage,
-        'limit': this.limit,
-        'province_ids': this.provinces,
-        'district_ids': this.districts,
-        'ward_ids': this.wards,
-        'hamlet_ids': this.hamlets
-      }
-      this.$store.dispatch('citizen/getListCitizens', this.paramReq).then(response => {
-        if (response.data.success) {
-          this.citizens = response.data.data.data_list;
-          let total = response.data.data.count;
-          this.currentTotal = this.citizens.length;
-          this.countAll = total;
-          this.pageCount = this.getPageCount(total, this.limit);
-        } else {
-          this.$toast.error('Lỗi.');
-        }
-        this.isLoadingCitizen = false;
-      })
-    },
-
     handleAddCitizen() {
       this.step = 2;
       this.actionType = 'add';
@@ -126,13 +97,33 @@ export default {
     handleGoBackEvent() {
       this.step = 1;
       this.rowIsSelected = {};
-      this.getListCitizens('paginate');
+      this.getListCitizens(this.paramReq, 'paginate');
     },
 
     handleSelectPageEvent(page) {
       this.currentPage = page;
-      this.getListCitizens('paginate');
+      this.getListCitizens(this.paramReq, 'paginate');
     },
+
+    getListCitizens(paramReq, type='filter') {
+      this.isLoadingCitizen = true;
+      this.paramReq = paramReq;
+      if(type == 'filter') {
+        this.currentPage = 1;
+      }
+      this.$store.dispatch('citizen/getListCitizens', this.paramReq).then(response => {
+        if (response.data.success) {
+          this.citizens = response.data.data.data_list;
+          let total = response.data.data.count;
+          this.currentTotal = this.citizens.length;
+          this.countAll = total;
+          this.pageCount = this.getPageCount(total, this.limit);
+        } else {
+          this.$toast.error('Lỗi.');
+        }
+        this.isLoadingCitizen = false;
+      })
+    }
   }
 }
 </script>

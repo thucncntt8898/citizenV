@@ -8,13 +8,13 @@
               CMT:
             </div>
             <div class="col-sm-5 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="Nhập căn cước/CMT (cách nhau bởi dấu phẩy)" v-model="formFilter.idCard">
+              <input type="text" class="form-control" placeholder="Nhập căn cước/CMT" v-model="formFilter.idCard">
             </div>
             <div class="col-sm-1 my-1 title-form">
               Họ và tên:
             </div>
             <div class="col-sm-5 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="Nhập họ tên (cách nhau bởi dấu phẩy)" v-model="formFilter.fullname">
+              <input type="text" class="form-control" placeholder="Nhập họ tên" v-model="formFilter.fullname">
             </div>
             <div class="col-sm-1 my-1 title-form">
               Ngày sinh:
@@ -52,7 +52,7 @@
               <vue-multiselect
                 v-model="formFilter.occupation"
                 :options="listOccupations"
-                :multiple="false"
+                :multiple="true"
                 :close-on-select="false"
                 :clear-on-select="false"
                 :preserve-search="false"
@@ -66,45 +66,108 @@
               Quê quán:
             </div>
             <div class="col-sm-4 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="Nhập quê quán (cách nhau bởi dấu phẩy)" v-model="formFilter.nativeAddress">
+              <input type="text" class="form-control" placeholder="Nhập quê quán" v-model="formFilter.nativeAddress">
             </div>
             <div class="col-sm-2 my-1 title-form">
               Địa chỉ tạm trú:
             </div>
             <div class="col-sm-5 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="Nhập địa chỉ tạm trú (cách nhau bởi dấu phẩy)" v-model="formFilter.tempAddress">
+              <input type="text" class="form-control" placeholder="Nhập địa chỉ tạm trú" v-model="formFilter.tempAddress">
             </div>
-            <div class="col-sm-1 my-1 title-form">
+            <div class="col-sm-2 my-1 title-form">
               Địa chỉ thường trú:
             </div>
-            <div class="col-sm-1 my-1 title-form">
+            <div class="col-sm-2 my-1 title-form">
               Tỉnh/thành phố:
             </div>
-            <div class="col-sm-2 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="" v-model="formFilter.permanentProvince">
+            <div class="col-sm-3 my-1 filter-cod">
+              <input type="text" class="form-control" placeholder="" v-model="user.province.name" v-if="user.province_id" disabled>
+              <vue-multiselect
+                v-model="formFilter.permanentProvince"
+                :options="provinces"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn thôn/bản/tổ dân phố"
+                label="name"
+                track-by="id"
+                v-else
+              >
+              </vue-multiselect>
             </div>
-            <div class="col-sm-1 my-1 title-form">
+            <div class="col-sm-2 my-1 title-form">
               Quận/huyện:
             </div>
-            <div class="col-sm-2 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="" v-model="formFilter.permanentDistrict">
+            <div class="col-sm-3 my-1 filter-cod">
+              <input type="text" class="form-control" placeholder="" v-model="user.district.name" v-if="user.district_id" disabled>
+              <vue-multiselect
+                v-model="formFilter.permanentDistrict"
+                :options="districts"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn thôn/bản/tổ dân phố"
+                label="name"
+                track-by="id"
+                v-else
+              >
+              </vue-multiselect>
             </div>
-            <div class="col-sm-1 my-1 title-form">
+            <div class="col-sm-2 my-1 filter-cod">
+            </div>
+            <div class="col-sm-2 my-1 title-form">
               Phường/xã:
             </div>
-            <div class="col-sm-2 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="" v-model="formFilter.permanentWard">
+            <div class="col-sm-3 my-1 filter-cod">
+              <input type="text" class="form-control" placeholder="" v-model="user.ward.name" v-if="user.ward_id" disabled>
+              <vue-multiselect
+                v-model="formFilter.permanentWard"
+                :options="wards"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn thôn/bản/tổ dân phố"
+                label="name"
+                track-by="id"
+                v-else
+              >
+              </vue-multiselect>
             </div>
-            <div class="col-sm-1 my-1 title-form">
+            <div class="col-sm-2 my-1 title-form">
               Tổ dân phố/bản/thôn:
             </div>
-            <div class="col-sm-2 my-1 filter-cod">
-              <input type="text" class="form-control" placeholder="" v-model="formFilter.permanentHamlet">
+            <div class="col-sm-3 my-1 filter-cod">
+              <input type="text" class="form-control" placeholder="" v-model="user.hamlet.name" v-if="user.hamlet_id" disabled>
+              <vue-multiselect
+                v-model="formFilter.permanentHamlet"
+                :options="hamlets"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn thôn/bản/tổ dân phố"
+                label="name"
+                track-by="id"
+                v-else
+              >
+              </vue-multiselect>
             </div>
           </div>
           <div class="form-row align-items-center">
             <div class="col-sm-12 my-1">
-              <button-custom class="btn-add" background-color="#058f49" classIcon="fa fa-plus-circle" buttonName="Thêm mới" @submitEvent="create()"></button-custom>
+              <div v-if="user.role == 5 && checkUserPermission()">
+                <button-custom
+                  class="btn-add"
+                  background-color="#058f49"
+                  classIcon="fa fa-plus-circle"
+                  buttonName="Thêm mới"
+                  @submitEvent="create()"
+                >
+                </button-custom>
+              </div>
               <button-custom class="btn-filter" backgroundColor="#058f49" classIcon="fa fa-search" :is-spinner="isLoadingCitizen" @submitEvent="filter()" buttonName="Tìm kiếm"></button-custom>
             </div>
           </div>
@@ -118,7 +181,7 @@
         <th width="10%">Họ và tên</th>
         <th width="10%">Ngày sinh</th>
         <th width="10%">Giới tính</th>
-        <th width="10%">Thao tác</th>
+        <th width="10%" v-if="user.role == 5">Thao tác</th>
       </tr>
       </thead>
       <tbody>
@@ -127,7 +190,7 @@
         <td>{{citizen.fullname}}</td>
         <td>{{citizen.dob}}</td>
         <td>{{citizen.gender == 0 ? 'Nữ' : 'Nam'}}</td>
-        <td>
+        <td v-if="user.role == 5">
           <div class="d-flex">
             <button type="button" class="btn btn-apply-outline-ghtk col-6" v-on:click="updateEvent(citizen)"><i class="fa fa-edit"></i> Sửa</button>
             <button type="button" class="btn btn-outline-danger col-6 ml-1" v-on:click="deleteEvent(index)"><i class="fa fa-trash"></i> Xóa</button>
@@ -142,6 +205,7 @@
 import moment from 'moment'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
+import {help} from "../../plugins/mixins/help.js";
 export default {
   name: "TableUser",
   props: [
@@ -158,6 +222,8 @@ export default {
     this.getInfoAddresses();
   },
 
+  mixins: [help],
+
   data() {
     return {
       formFilter: {
@@ -168,10 +234,10 @@ export default {
         'nativeAddress': '',
         'tempAddress': '',
         'occupation': [],
-        'permanentProvince': {id:'', name: ''},
-        'permanentDistrict': {id:'', name: ''},
-        'permanentWard': {id:'', name: ''},
-        'permanentHamlet': {id:'', name: ''},
+        'permanentProvince': [],
+        'permanentDistrict': [],
+        'permanentWard': [],
+        'permanentHamlet': [],
       },
       genderTypes: [
         {id: 0, name: 'Nữ'},
@@ -180,6 +246,12 @@ export default {
       ],
       paramReq: {},
       listOccupations: [],
+      user: this.$auth.user[0],
+      provinces: [],
+      districts: [],
+      wards: [],
+      hamlets: [],
+      page: 1,
     }
   },
 
@@ -222,7 +294,17 @@ export default {
     },
 
     getInfoAddresses() {
-
+      this.$store.dispatch('user/getInfoAddresses', this.paramReq).then(response => {
+        if (response.data.success) {
+          let data = response.data.data;
+          this.provinces = data.provinces != undefined ? data.provinces : [];
+          this.districts = data.districts != undefined ? data.districts : [];
+          this.wards = data.wards != undefined ? data.wards : [];
+          this.hamlets = data.hamlets != undefined ? data.hamlets : [];
+        } else {
+          this.$toast.error('Lỗi.');
+        }
+      })
     },
 
     handleGoBackEvent() {
@@ -234,7 +316,33 @@ export default {
     handleSelectPageEvent(page) {
       this.currentPage = page;
       this.getListOccupations('paginate');
-    }
+    },
+
+    filter(){
+      let data = this.formFilter;
+
+      let paramReq = {
+        'id_card': data.idCard,
+        'fullname': data.fullname,
+        'dob': data.dob != '' ? moment(data.dob).format('YYYY-MM-DD') : '',
+        'gender': data.gender.id,
+        'native_address': data.nativeAddress,
+        'temp_address': data.tempAddress,
+        'permanent_address_province': this.user.province_id != null ? [this.user.province_id] :
+          (data.permanentProvince != null ? data.permanentProvince.map(province => {return province.id}) : []),
+        'permanent_address_district': this.user.district_id != null? [this.user.district_id] :
+          (data.permanentDistrict != null ? data.permanentDistrict.map(district => {return district.id}) : []),
+        'permanent_address_ward': this.user.ward_id != null? [this.user.ward_id] :
+          (data.permanentWard != null ? data.permanentWard.map(ward => {return ward.id}) : []),
+        'permanent_address_hamlet': this.user.hamlet_id != null? [this.user.hamlet_id] :
+          (data.permanentHamlet != null ? data.permanentHamlet.map(hamlet => {return hamlet.id}) : []),
+        'occupation': data.occupation != '' ? data.occupation.map(oc => {return oc.id}) : [],
+        'page': 1,
+        'limit': 10,
+      }
+
+      this.$emit('handleFilterCitizen', paramReq);
+    },
   }
 }
 </script>

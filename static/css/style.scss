@@ -379,3 +379,46 @@ i.status {
 table th {
 	vertical-align: middle !important;
 }
+
+#form-search-main {
+  .btn-add {
+    width: 150px;
+    cursor: pointer;
+    margin-top: 5px;
+    margin-left: 10px;
+    height: 40px;
+    float: right;
+  }
+
+  .btn-download {
+    cursor: pointer;
+    margin-top: 5px;
+    background-color: #058f49;
+    width: 150px;
+    color: white;
+    height: 40px;
+    padding-top: 11px;
+    float: right;
+  }
+
+  .btn-filter {
+    width: 150px;
+    cursor: pointer;
+    float: right;
+    margin-top: 5px;
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  .fa-download {
+    padding-right: 5px;
+  }
+
+  .title-form {
+    font-weight: 600;
+  }
+
+  .card {
+    border-radius: 3px;
+  }
+}

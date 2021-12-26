@@ -123,7 +123,6 @@ export default {
       formData.append('status', this.status == true ? 1 : 0);
       formData.append('time_start', moment(this.start).format('YYYY-MM-DD HH:mm:ss'));
       formData.append('time_finish', moment(this.finish).format('YYYY-MM-DD HH:mm:ss'));
-      console.log(formData.get('time_start'));
       this.$store.dispatch(url, formData).then(response => {
         if (response.data.success) {
           this.goBack();
