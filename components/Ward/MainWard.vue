@@ -75,12 +75,22 @@ export default {
       actionType: 'add',
       countAll: 0,
       currentTotal: 0,
-      paramReq: {},
-      wardList: [],
+      showAction: this.getShowAction(),
     }
   },
 
   methods: {
+    getShowAction() {
+      let date1 = this.$auth.user[0].time_start;
+      let date2 = this.$auth.user[0].time_finish;
+      if (this.$auth.user[0].time_start == null || this.$auth.user[0].time_finish == null) {
+        return false;
+      }
+
+      let start_time = new Date(date1.replace(/-/g,'/'));
+      let finish_time = new Date(date2.replace(/-/g,'/'));
+      return this.$auth.user[0].role === 3 && this.$auth.user[0].status == 1 && start_time <= new Date() && new Date() <= finish_time;
+    },
     createEvent() {
       this.step = 2;
       this.actionType = 'add';

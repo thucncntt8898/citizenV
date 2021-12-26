@@ -50,7 +50,7 @@
           </div>
           <div class="form-row align-items-center">
             <div class="col-sm-12 my-1">
-              <button-custom class="btn-add" classIcon="fa fa-plus-circle" buttonName="Thêm mới"
+              <button-custom class="btn-add" v-if="this.showAction" classIcon="fa fa-plus-circle" buttonName="Thêm mới"
                              @submitEvent="createEvent()"></button-custom>
               <button-custom class="btn-filter" backgroundColor="#058f49" classIcon="fa fa-search"
                              :is-spinner="isLoadingDistrict" @submitEvent="filter()"
@@ -104,13 +104,25 @@ export default {
   data() {
     return {
       user: {},
-      code: ''
+      code: '',
+      showAction: this.getShowAction(),
     }
   },
 
   mixins: [help],
 
   methods: {
+    getShowAction() {
+      let date1 = this.$auth.user[0].time_start;
+      let date2 = this.$auth.user[0].time_finish;
+      if (this.$auth.user[0].time_start == null || this.$auth.user[0].time_finish == null) {
+        return false;
+      }
+
+      let start_time = new Date(date1.replace(/-/g,'/'));
+      let finish_time = new Date(date2.replace(/-/g,'/'));
+      return this.$auth.user[0].role === 2 && this.$auth.user[0].status === 1 && start_time <= new Date() && new Date() <= finish_time;
+    },
     deleteEvent(index) {
       this.$swal({
         title: 'Bạn có muốn xóa config này không?',

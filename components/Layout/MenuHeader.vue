@@ -119,11 +119,6 @@ export default {
   font-weight: bold;
 }
 
-/* Change the background color on mouse-over */
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
 
 /* Style the active/current link*/
 .header a.active {
