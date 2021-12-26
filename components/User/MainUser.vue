@@ -7,8 +7,11 @@
     </div>
     <div v-if="step == 1">
       <table-user
-        :users="users"
+        :list-users="listUsers"
+        :is-loading-hamlet="isLoadingUser"
         @handleUpdateEvent="updateEvent"
+        @handleFilter="handleFilter"
+        @handleCreateEvent="createEvent"
       ></table-user>
       <div class="row">
         <div class="col-2">
@@ -56,15 +59,14 @@ export default {
   components: {TableUser, FormFilterUser},
 
   created() {
-    this.getListUsers();
   },
 
   mixins: [help],
 
   data() {
     return {
-      isLoadingProvince: false,
-      users: [],
+      isLoadingUser: false,
+      listUsers: [],
       currentPage: 1,
       limit: 10,
       pageCount: 0,
@@ -82,39 +84,42 @@ export default {
   },
 
   methods: {
-    getListUsers(type='filter') {
-      if(type == 'filter') {
-        this.currentPage = 1
+    createEvent() {
+      this.step = 2;
+      this.actionType = 'add';
+    },
+
+    handleGoBackEvent() {
+      this.step = 1;
+      this.rowIsSelected = {};
+      this.handleFilter(this.paramReq, 'paginate');
+    },
+
+    handleSelectPageEvent(page) {
+      this.currentPage = page;
+      this.handleFilter(this.paramReq, 'paginate');
+    },
+
+    handleFilter(paramReq, type = 'filter') {
+      this.isLoadingDistrict = true;
+      this.paramReq = paramReq;
+      if (type == 'filter') {
+        this.currentPage = 1;
       }
-
-      this.isLoadingProvince = true
-
-      this.paramReq = {
-        'page': this.currentPage,
-        'limit': this.limit,
-        'province_ids': this.provinces,
-        'district_ids': this.districts,
-        'ward_ids': this.wards,
-        'hamlet_ids': this.hamlets
-      }
-
+      this.paramReq.page = this.currentPage;
+      this.paramReq.limit = 10;
       this.$store.dispatch('user/getListUsers', this.paramReq).then(response => {
         if (response.data.success) {
-          this.users = response.data.data.data_list;
+          this.listUsers = response.data.data.data_list;
           let total = response.data.data.count;
-          this.currentTotal = this.users.length;
+          this.currentTotal = this.listUsers.length;
           this.countAll = total;
           this.pageCount = this.getPageCount(total, this.limit);
         } else {
           this.$toast.error('Lỗi.');
         }
-        this.isLoadingProvince = false;
+        this.isLoadingDistrict = false;
       })
-    },
-
-    createEvent() {
-      this.step = 2;
-      this.actionType = 'add';
     },
 
     updateEvent(data) {
@@ -122,17 +127,6 @@ export default {
       this.step = 2;
       this.actionType = 'edit';
     },
-
-    handleGoBackEvent() {
-      this.step = 1;
-      this.rowIsSelected = {};
-      this.getListUsers('paginate');
-    },
-
-    handleSelectPageEvent(page) {
-      this.currentPage = page;
-      this.getListUsers('paginate');
-    }
   }
 }
 </script>

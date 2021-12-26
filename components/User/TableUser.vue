@@ -16,7 +16,7 @@
                 :close-on-select="false"
                 :clear-on-select="false"
                 :preserve-search="false"
-                placeholder="Chọn thôn/bản/tổ dân phố"
+                placeholder="Chọn tỉnh/thành phố"
                 label="name"
                 track-by="id"
                 v-else
@@ -35,7 +35,7 @@
                 :close-on-select="false"
                 :clear-on-select="false"
                 :preserve-search="false"
-                placeholder="Chọn thôn/bản/tổ dân phố"
+                placeholder="Chọn quận/huyện"
                 label="name"
                 track-by="id"
                 v-else
@@ -54,7 +54,7 @@
                 :close-on-select="false"
                 :clear-on-select="false"
                 :preserve-search="false"
-                placeholder="Chọn thôn/bản/tổ dân phố"
+                placeholder="Chọn xã/phường"
                 label="name"
                 track-by="id"
                 v-else
@@ -77,6 +77,46 @@
                 label="name"
                 track-by="id"
                 v-else
+              >
+              </vue-multiselect>
+            </div>
+            <div class="col-sm-1 my-1 title-form">
+              Username:
+            </div>
+            <div class="col-sm-2 my-1 filter-cod">
+              <input type="text" class="form-control" placeholder="Nhập mã code" v-model="username">
+            </div>
+            <div class="col-sm-1 my-1 title-form">
+              Trạng thái:
+            </div>
+            <div class="col-sm-2 my-1 filter-cod">
+              <vue-multiselect
+                v-model="status"
+                :options="statusTypes"
+                :multiple="false"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn trạng thái"
+                label="name"
+                track-by="id"
+              >
+              </vue-multiselect>
+            </div>
+            <div class="col-sm-2 my-1 title-form">
+              Trạng thái hoàn thành:
+            </div>
+            <div class="col-sm-2 my-1 filter-cod">
+              <vue-multiselect
+                v-model="statusComplete"
+                :options="statusCompletes"
+                :multiple="false"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn trạng thái hoàn thành"
+                label="name"
+                track-by="id"
               >
               </vue-multiselect>
             </div>
@@ -103,7 +143,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(userInfo, index) in users" :key="index">
+      <tr v-for="(userInfo, index) in listUsers" :key="index">
         <td>{{userInfo.username}}</td>
         <td>{{userInfo.province_name}}</td>
         <td v-if="user.role >= 2">{{userInfo.district_name}}</td>
@@ -121,25 +161,32 @@
 </template>
 <script>
 import moment from "moment";
+import {help} from "../../plugins/mixins/help.js";
 
 export default {
   name: "TableUser",
   props: [
-    'users'
+    'listUsers',
+    'isLoadingUser'
   ],
+
+  mixins: [help],
 
   data() {
     return {
-      user: {},
-      isLoadingUser: false,
-      provincesAreSelected: '',
-      districtsAreSelected: '',
-      wardsAreSelected: '',
-      hamletsAreSelected: '',
-      provinces: [],
-      districts: [],
-      wards: [],
-      hamlets: []
+      username: '',
+      statusTypes: [
+        {id: 0, 'name': 'Tất cả'},
+        {id: 1, 'name': 'Mở'},
+        {id: 2, 'name': 'Khóa'},
+      ],
+      statusCompletes: [
+        {id: 0, 'name': 'Tất cả'},
+        {id: 1, 'name': 'Chưa hoàn thành'},
+        {id: 2, 'name': 'Đã hoàn thành'},
+      ],
+      status:  {id: 0, 'name': 'Tất cả'},
+      statusComplete: {id: 0, 'name': 'Tất cả'},
     }
   },
 
@@ -179,12 +226,18 @@ export default {
 
     filter() {
       let paramReq = {
-
+        'province_ids': this.provincesAreSelected != '' ? this.provincesAreSelected.map(province => {return province.id}) : [],
+        'district_ids': this.districtsAreSelected != '' ? this.districtsAreSelected.map(province => {return province.id}) : [],
+        'ward_ids': this.wardsAreSelected != '' ? this.wardsAreSelected.map(province => {return province.id}) : [],
+        'hamlet_ids': this.hamletsAreSelected != '' ? this.hamletsAreSelected.map(province => {return province.id}) : [],
+        'username': this.username,
+        'status': this.status.id,
+        'is_completed': this.statusComplete.id,
         'page': 1,
         'limit': 10,
       }
 
-      this.$emit('handleFilterCitizen', paramReq);
+      this.$emit('handleFilter', paramReq);
     }
   }
 }
