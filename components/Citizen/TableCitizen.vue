@@ -158,7 +158,7 @@
           </div>
           <div class="form-row align-items-center">
             <div class="col-sm-12 my-1">
-              <div v-if="user.role == 5 && checkUserPermission()">
+              <div>
                 <button-custom
                   class="btn-add"
                   background-color="#058f49"
@@ -190,7 +190,7 @@
         <td>{{citizen.fullname}}</td>
         <td>{{citizen.dob}}</td>
         <td>{{citizen.gender == 0 ? 'Nữ' : 'Nam'}}</td>
-        <td v-if="user.role == 5">
+        <td>
           <div class="d-flex">
             <button type="button" class="btn btn-apply-outline-ghtk col-6" v-on:click="updateEvent(citizen)"><i class="fa fa-edit"></i> Sửa</button>
             <button type="button" class="btn btn-outline-danger col-6 ml-1" v-on:click="deleteEvent(index)"><i class="fa fa-trash"></i> Xóa</button>
