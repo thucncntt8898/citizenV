@@ -78,10 +78,14 @@ export default {
       currentTotal: 0,
       paramReq: {},
       wardList: [],
+      showAction: this.getShowAction(),
     }
   },
 
   methods: {
+    getShowAction() {
+      return this.$auth.user[0].role === 4;
+    },
     createEvent() {
       this.step = 2;
       this.actionType = 'add';

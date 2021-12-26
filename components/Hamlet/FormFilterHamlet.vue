@@ -23,7 +23,7 @@
               <input type="text" class="form-control mb-2 mr-sm-2" id="campaign" placeholder="Nhập mã code" v-model="code">
             </div>
           </div>
-          <button-custom class="btn button-save" :is-spinner="isActionLoading" classIcon="fa fa-save" buttonName="Lưu" @submitEvent="actionType == 'add' ? onAdd(): onEdit()" ></button-custom>
+          <button-custom v-if="this.showAction" class="btn button-save" :is-spinner="isActionLoading" classIcon="fa fa-save" buttonName="Lưu" @submitEvent="actionType == 'add' ? onAdd(): onEdit()" ></button-custom>
         </div>
       </div>
     </div>
@@ -53,7 +53,8 @@ export default {
       isLoading: false,
       isActionLoading: false,
       name: '',
-      code: ''
+      code: '',
+      showAction: this.getShowAction(),
     }
   },
 
@@ -65,7 +66,9 @@ export default {
   },
 
   methods: {
-
+    getShowAction() {
+      return this.$auth.user[0].role === 4;
+    },
     onAdd() {
       this.createOrUpdate('hamlet/insertHamlet');
     },

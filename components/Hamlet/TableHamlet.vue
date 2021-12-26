@@ -90,7 +90,7 @@
           </div>
           <div class="form-row align-items-center">
             <div class="col-sm-12 my-1">
-              <button-custom class="btn-add" classIcon="fa fa-plus-circle" buttonName="Thêm mới"
+              <button-custom class="btn-add" v-if="this.showAction" classIcon="fa fa-plus-circle" buttonName="Thêm mới"
                              @submitEvent="createEvent()"></button-custom>
               <button-custom class="btn-filter" backgroundColor="#058f49" classIcon="fa fa-search"
                              :is-spinner="isLoadingHamlet" @submitEvent="filter()"
@@ -137,11 +137,15 @@ export default {
 
   data() {
     return {
-      'code': ''
+      'code': '',
+      showAction: this.getShowAction(),
     }
   },
 
   methods: {
+    getShowAction() {
+      return this.$auth.user[0].role === 4;
+    },
     deleteEvent(index) {
       this.$swal({
         title: 'Bạn có muốn xóa config này không?',
