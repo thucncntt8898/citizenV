@@ -15,7 +15,7 @@
               <input type="text" class="form-control mb-2 mr-sm-2" id="district" placeholder="Nhập tên quận/huyện" v-model="name">
             </div>
           </div>
-          <div class="form-row align-items-center">
+          <div class="form-row align-items-center" v-if="!(this.actionType == 'edit')">
             <div class="col-sm-3 my-1 title-form">
               Mã code
             </div>

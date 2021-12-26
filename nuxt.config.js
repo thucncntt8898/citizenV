@@ -1,6 +1,6 @@
 export default {
   env: {
-    apiURL: 'http://localhost:8000/api'
+    apiURL: 'http://localhost:8888/api'
   },
   /*
   ** Nuxt rendering mode
@@ -50,6 +50,7 @@ export default {
     '@/node_modules/vue-multiselect/dist/vue-multiselect.min.css',
     '@/node_modules/vue-select/dist/vue-select.css',
     '@/static/css/style.scss',
+    "assets/layouts/global.css",
   ],
   /*
   ** Plugins to load before mounting the App
@@ -104,7 +105,7 @@ export default {
   },
 
   axios: {
-    baseURL: 'http://localhost:8000/api'
+    baseURL: 'http://localhost:8888/api'
   },
 
   // proxy: {

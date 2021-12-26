@@ -19,5 +19,9 @@ export const actions = {
 
   updateHamlet({commit}, params) {
     return axios.post('hamlet/update', params);
+  },
+
+  completeStatistical({commit}, params) {
+    return axios.post('hamlet/complete', params);
   }
 }
