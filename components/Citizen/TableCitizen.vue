@@ -159,7 +159,7 @@
           <div class="form-row align-items-center">
             <div class="col-sm-12 my-1">
               <div>
-                <button-custom
+                <button-custom v-if="this.showAction"
                   class="btn-add"
                   background-color="#058f49"
                   classIcon="fa fa-plus-circle"
@@ -177,11 +177,11 @@
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th width="10%">Căn cước/CMT</th>
-        <th width="10%">Họ và tên</th>
-        <th width="10%">Ngày sinh</th>
-        <th width="10%">Giới tính</th>
-        <th width="10%" v-if="user.role == 5">Thao tác</th>
+        <th width="20%">Căn cước/CMT</th>
+        <th width="20%">Họ và tên</th>
+        <th width="20%">Ngày sinh</th>
+        <th width="20%">Giới tính</th>
+        <th width="20%" v-if="user.role == 5">Thao tác</th>
       </tr>
       </thead>
       <tbody>
@@ -252,10 +252,22 @@ export default {
       wards: [],
       hamlets: [],
       page: 1,
+      showAction: this.getShowAction()
     }
   },
 
   methods: {
+    getShowAction() {
+      let date1 = this.$auth.user[0].time_start;
+      let date2 = this.$auth.user[0].time_finish;
+      if (this.$auth.user[0].time_start == null || this.$auth.user[0].time_finish == null) {
+        return false;
+      }
+
+      let start_time = new Date(date1.replace(/-/g,'/'));
+      let finish_time = new Date(date2.replace(/-/g,'/'));
+      return this.$auth.user[0].role === 5 && this.$auth.user[0].status == 1 && start_time <= new Date() && new Date() <= finish_time;
+    },
     deleteEvent(index) {
       this.$swal({
         title: 'Bạn có muốn xóa config này không?',

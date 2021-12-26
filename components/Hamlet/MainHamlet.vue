@@ -84,15 +84,7 @@ export default {
 
   methods: {
     getShowAction() {
-      let date1 = this.$auth.user[0].time_start;
-      let date2 = this.$auth.user[0].time_finish;
-      if (this.$auth.user[0].time_start == null || this.$auth.user[0].time_finish == null) {
-        return false;
-      }
-
-      let start_time = new Date(date1.replace(/-/g,'/'));
-      let finish_time = new Date(date2.replace(/-/g,'/'));
-      return this.$auth.user[0].role === 4 && this.$auth.user[0].status == 1 && start_time <= new Date() && new Date() <= finish_time;
+      return this.$auth.user[0].role === 4;
     },
     createEvent() {
       this.step = 2;
