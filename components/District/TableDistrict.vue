@@ -24,7 +24,24 @@
               >
               </vue-multiselect>
             </div>
-            <div class="col-sm-1 my-1 title-form">
+            <div class="col-sm-2 my-1 title-form">
+              Quận/huyện:
+            </div>
+            <div class="col-sm-4 my-1 filter-cod">
+              <vue-multiselect
+                v-model="districtsAreSelected"
+                :options="districts"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn thôn/bản/tổ dân phố"
+                label="name"
+                track-by="id"
+              >
+              </vue-multiselect>
+            </div>
+            <div class="col-sm-2 my-1 title-form">
               Code:
             </div>
             <div class="col-sm-4 my-1 filter-cod">
@@ -80,18 +97,13 @@ import {help} from "../../plugins/mixins/help.js";
 export default {
   name: "TableDistrict",
   props: [
-    'listDistricts'
+    'listDistricts',
+    'isLoadingDistrict',
   ],
-
-  created() {
-    this.user = this.$auth.user[0];
-    this.getInfoAddresses();
-  },
 
   data() {
     return {
       user: {},
-      isLoadingDistrict: false,
       code: ''
     }
   },
@@ -114,6 +126,7 @@ export default {
     filter() {
       let paramReq = {
         'province_ids': this.provincesAreSelected != '' ? this.provincesAreSelected.map(province => {return province.id}) : [],
+        'district_ids': this.districtsAreSelected != '' ? this.districtsAreSelected.map(province => {return province.id}) : [],
         'code': this.code
       };
 
@@ -121,7 +134,7 @@ export default {
     },
 
     createEvent() {
-
+      this.$emit('handleCreateEvent');
     }
   }
 }

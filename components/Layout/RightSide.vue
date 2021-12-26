@@ -16,7 +16,7 @@
             <div class="category-operation-body">
               <div class="d-flex align-items-center justify-content-between each-category" v-for="(operation, index) in operationCategories" :key="index"
                    :class="activeRoute(operation) ? 'each-category-active' : ''" v-on:click="pickCategoryOperation(operation)"
-                   v-if="$auth.user[0].role < operation.role || operation == 1">
+                   v-if="$auth.user[0].role < operation.role || operation.role == 1">
                 <div>{{operation.text}}</div>
               </div>
             </div>
@@ -70,10 +70,10 @@
 </script>
 
 <style scoped lang="scss">
-    $ghtk_color: #058f49;
+    $color: #058f49;
 
     .ghtk-color {
-        color: $ghtk_color;
+        color: $color;
     }
 
     .categories-padding {
@@ -201,7 +201,7 @@
                     }
 
                     .each-category-active {
-                        background-color: rgba(238, 238, 238, 0.9);
+                        background-color: white;
                     }
                 }
             }

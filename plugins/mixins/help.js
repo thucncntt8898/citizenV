@@ -16,6 +16,10 @@ export const help = {
     }
   },
 
+  created() {
+    this.getInfoAddresses();
+  },
+
   watch: {
     provincesAreSelected(val) {
 

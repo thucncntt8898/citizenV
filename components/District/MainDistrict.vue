@@ -11,6 +11,7 @@
         :isLoadingDistrict="isLoadingDistrict"
         @handleUpdateEvent="updateEvent"
         @handleFilter="handleFilter"
+        @handleCreateEvent="createEvent"
       ></table-district>
       <div class="row">
         <div class="col-2">
@@ -121,12 +122,12 @@ export default {
     handleGoBackEvent() {
       this.step = 1;
       this.rowIsSelected = {};
-      this.getListDistricts('paginate');
+      this.handleFilter(this.paramReq, 'paginate');
     },
 
     handleSelectPageEvent(page) {
       this.currentPage = page;
-      this.getListDistricts('paginate');
+      this.handleFilter(this.paramReq, 'paginate');
     },
 
     handleFilter(paramReq, type = 'filter') {

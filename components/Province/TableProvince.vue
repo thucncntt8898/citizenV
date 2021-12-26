@@ -1,5 +1,48 @@
 <template>
   <div id="config-xstar-table-main">
+    <div id="form-search-main">
+      <div class="card">
+        <div class="card-body">
+          <div class="form-row align-items-center">
+            <div class="col-sm-2 my-1 title-form">
+              Tỉnh/thành phố:
+            </div>
+            <div class="col-sm-4 my-1 filter-cod">
+              <input type="text" class="form-control" placeholder="" v-model="user.province.name"
+                     v-if="user.province_id" disabled>
+              <vue-multiselect
+                v-model="provincesAreSelected"
+                :options="provinces"
+                :multiple="true"
+                :close-on-select="false"
+                :clear-on-select="false"
+                :preserve-search="false"
+                placeholder="Chọn thôn/bản/tổ dân phố"
+                label="name"
+                track-by="id"
+                v-else
+              >
+              </vue-multiselect>
+            </div>
+            <div class="col-sm-1 my-1 title-form">
+              Code:
+            </div>
+            <div class="col-sm-4 my-1 filter-cod">
+              <input type="text" class="form-control" placeholder="Nhập mã code" v-model="code">
+            </div>
+          </div>
+          <div class="form-row align-items-center">
+            <div class="col-sm-12 my-1">
+              <button-custom class="btn-add" classIcon="fa fa-plus-circle" buttonName="Thêm mới"
+                             @submitEvent="createEvent()" v-if="user.role == 2 && checkUserPermission()"></button-custom>
+              <button-custom class="btn-filter" backgroundColor="#058f49" classIcon="fa fa-search"
+                             :is-spinner="isLoadingProvince" @submitEvent="filter()"
+                             buttonName="Tìm kiếm"></button-custom>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <table class="table table-bordered">
       <thead>
       <tr>
@@ -12,7 +55,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(province, index) in provinces" :key="index">
+      <tr v-for="(province, index) in listProvinces" :key="index">
         <td>{{province.name}}</td>
         <td>{{province.code}}</td>
         <td>{{province.districts.length}}</td>
@@ -30,11 +73,22 @@
   </div>
 </template>
 <script>
+import {help} from "../../plugins/mixins/help.js";
+
 export default {
   name: "TableProvince",
   props: [
-    'provinces'
+    'listProvinces',
+    'isLoadingProvince'
   ],
+
+  data() {
+    return {
+     'code': ''
+    }
+  },
+
+  mixins: [help],
 
   methods: {
     deleteEvent(index) {
@@ -46,8 +100,21 @@ export default {
     },
 
     updateEvent(data) {
-      this.$emit('handleUpdateEvent', data)
-    }
+      this.$emit('handleUpdateEvent', data);
+    },
+
+    createEvent() {
+      this.$emit('handleCreateEvent');
+    },
+
+    filter() {
+      let paramReq = {
+        'province_ids': this.provincesAreSelected != '' ? this.provincesAreSelected.map(province => {return province.id}) : [],
+        'code': this.code
+      };
+
+      this.$emit('handleFilter', paramReq)
+    },
   }
 }
 </script>

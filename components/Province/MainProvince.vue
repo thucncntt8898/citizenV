@@ -7,10 +7,11 @@
     </div>
     <div v-if="step == 1">
       <table-province
-        :provinces="provinces"
+        :list-provinces="listProvinces"
         :isLoadingDistrict="isLoadingProvince"
         @handleUpdateEvent="updateEvent"
         @handleFilter="handleFilter"
+        @handleCreateEvent="createEvent"
       ></table-province>
       <div class="row">
         <div class="col-2">
@@ -57,7 +58,6 @@ export default {
   components: {TableProvince, FormFilterProvince},
 
   created() {
-    this.getListProvinces();
   },
 
   mixins: [help],
@@ -95,12 +95,12 @@ export default {
     handleGoBackEvent() {
       this.step = 1;
       this.rowIsSelected = {};
-      this.getListProvinces('paginate');
+      this.handleFilter(this.paramReq,'paginate');
     },
 
     handleSelectPageEvent(page) {
       this.currentPage = page;
-      this.getListProvinces('paginate');
+      this.handleFilter(this.paramReq, 'paginate');
     },
 
     handleFilter(paramReq, type = 'filter') {
@@ -115,7 +115,7 @@ export default {
         if (response.data.success) {
           this.listProvinces = response.data.data.data_list;
           let total = response.data.data.count;
-          this.currentTotal = this.listDistricts.length;
+          this.currentTotal = this.listProvinces.length;
           this.countAll = total;
           this.pageCount = this.getPageCount(total, this.limit);
         } else {
